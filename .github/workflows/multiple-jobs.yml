@@ -1,3 +1,7 @@
+# By default all the jobs will run parallely in separate VM
+# 'needs' helps workflow to run jobs sequencly even though each jobs runs in separate VM
+# upload/download actions help the workflow to store/dowload the artificats across the jobs(VMs)
+
 name: Generate ASCII Artwork
 
 on: push
@@ -15,13 +19,24 @@ jobs:
         - name: Sleep for 30 seconds
           run: sleep 30
 
+        - name: Upload Dragon text file # without uploading the dragon.txt file the test_job_2 will fail because it will be running on differnt VM
+          uses: actions/upload-artifact@v3
+          with:
+            name: dragon-text-file
+            path: dragon.txt
+        
     test_job_2:
-        needs: build_job_1
+        needs: build_job_1 # needs will helps the workflow to run the job sequencily, even though jobs are running on differnt VM, this job will wait until build_job_1 finished
         runs-on: ubuntu-latest
         steps:
         - name: Sleep for 30 seconds
           run: sleep 30
         
+        - name: Download Dragon text file # will download the artifacts uploaded in build_job_1
+          uses: actions/download-artifact@v3
+          with:
+            name: dragon-text-file
+
         - name: Test File Exists
           run: grep -i "dragon" dragon.txt
 
@@ -29,6 +44,12 @@ jobs:
         needs: test_job_2
         runs-on: ubuntu-latest
         steps:
+        
+        - name: Download Dragon text file # will download the artifacts uploaded in build_job_1
+          uses: actions/download-artifact@v3
+          with:
+            name: dragon-text-file
+  
         - name: Read File
           run: cat dragon.txt
         
