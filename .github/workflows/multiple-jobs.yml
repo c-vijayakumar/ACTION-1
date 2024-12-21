@@ -1,7 +1,7 @@
 # By default all the jobs will run parallely in separate VM
 # 'needs' helps workflow to run jobs sequencly even though each jobs runs in separate VM
 # upload/download actions help the workflow to store/dowload the artificats across the jobs(VMs)
-
+# dragon.txt will be stored in the github even though all the VMs destroyed after the job execution
 name: Generate ASCII Artwork
 
 on: push
