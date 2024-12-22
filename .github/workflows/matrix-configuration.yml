@@ -33,5 +33,5 @@ jobs:
         - name: Echo Docker Details
           run: docker info
         
-        - name: Run Image
+        - name: Run Image on ${{ matrix.images }}
           run: docker run ${{ matrix.images }}
