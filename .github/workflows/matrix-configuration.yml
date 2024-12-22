@@ -23,11 +23,22 @@ jobs:
     #     - name: Run Image
     #       run: docker run hello-world
 
+    # matrix helps to run same job in multiple os, so we no need to rebeat the job definition for each os
+    # if any job fail, matrix strategy will cancel any running job, or jobs which are in queue. can bypass this using variable
+    # all the jobs will be running parallely, we can control this behaviour using variable
     deploy:
         strategy:
+            fail-fast: false # by default this is true, means if any job fails, all other jobs all will be canceled.max-parallel: 
+            max-parallel: 2 # only 2 jobs will be running in parallel, instead of all the jobs
             matrix:
                 os: [ubuntu-latest, ubuntu-20.04, windows-latest]
                 images: [hello-world, alpine]
+                exclude: # exlclue running alpine image in windows os, so only 5 five job will be running in parallel
+                  - images: alpine
+                    os: windows-latst
+                include:
+                  - images: amd64/alpine
+                    os: ubunutu-20.04
         runs-on: ${{ matrix.os }}
         steps:
         - name: Echo Docker Details
