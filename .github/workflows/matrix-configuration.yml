@@ -3,7 +3,6 @@ name: Metrix Configuration
 on:
     push:
     workflow_dispatch:
-
 jobs:
     # deploy-on-ubuntu:
     #     runs-on: ubuntu-latest
@@ -35,7 +34,7 @@ jobs:
                 images: [hello-world, alpine]
                 exclude: # exlclue running alpine image in windows os, so only 5 five job will be running in parallel
                   - images: alpine
-                    os: windows-latst
+                    os: windows-latest
                 include:
                   - images: amd64/alpine
                     os: ubunutu-20.04
